@@ -321,30 +321,27 @@
 
   function gerarCaso() {
     var t = '';
-    t += '══════════════════════════════════════════════\n';
-    t += '  PASSAGEM DE CASO — PS ZERADO\n';
-    t += '══════════════════════════════════════════════\n\n';
+    t += '*PASSAGEM DE CASO — PS ZERADO*\n\n';
 
-    t += '[ IDENTIFICAÇÃO ]\n';
+    t += '*[ IDENTIFICAÇÃO ]*\n';
     t += 'Paciente: ' + v('iniciais') + ' | Idade: ' + v('idade') + ' | Sexo: ' + v('sexo') + '\n\n';
 
-    t += '[ HISTÓRIA ]\n';
-    t += 'Queixa Principal: ' + v('queixa') + '\n\n';
+    t += '*[ HISTÓRIA ]*\n';
+    t += 'Queixa: ' + v('queixa') + '\n\n';
     t += 'HDA:\n' + v('hda') + '\n\n';
     t += 'HPP:\n' + v('hpp') + '\n\n';
 
-    t += '[ EXAME ]\n';
-    t += 'Sinais Vitais: FC ' + v('fc') + ' bpm | FR ' + v('fr') + ' irpm | PA ' + v('pa') + ' mmHg | Temp. ' + v('temp') + '°C | SpO₂ ' + v('spo2') + '%\n\n';
-    t += 'Exame Físico:\n' + v('exame_fisico') + '\n\n';
-    t += 'Laboratorial:\n' + v('lab') + '\n\n';
+    t += '*[ EXAME ]*\n';
+    t += 'FC ' + v('fc') + ' | FR ' + v('fr') + ' | PA ' + v('pa') + ' | Temp ' + v('temp') + '°C | SpO₂ ' + v('spo2') + '%\n\n';
+    t += 'Físico:\n' + v('exame_fisico') + '\n\n';
+    t += 'Lab:\n' + v('lab') + '\n\n';
     t += 'Imagem:\n' + v('imagem') + '\n\n';
 
-    t += '[ O QUE QUERO DISCUTIR ]\n';
+    t += '*[ O QUE QUERO DISCUTIR ]*\n';
     t += v('discussao') + '\n\n';
 
     var now = new Date();
-    t += '──────────────────────────────────────────────\n';
-    t += 'Gerado em ' + now.toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'}) + ' às ' + pad(now.getHours()) + 'h' + pad(now.getMinutes());
+    t += '— Gerado em ' + now.toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'}) + ' às ' + pad(now.getHours()) + 'h' + pad(now.getMinutes());
 
     var ta = document.getElementById('texto-gerado');
     ta.value = t;
