@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Passagem de Caso — PS Zerado</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --red: #CC0000;
+    --red-dark: #a30000;
+    --red-light: #ffeaea;
+    --black: #111111;
+    --gray: #666;
+    --border: #e0e0e0;
+    --font: 'Montserrat', Arial, sans-serif;
+  }
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body { font-family: var(--font); background: #fff; color: var(--black); font-size: 14px; line-height: 1.6; }
+
+  /* TOPBAR */
+  .topbar {
+    background: #fff;
+    border-bottom: 2.5px solid var(--red);
+    padding: 12px 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    box-shadow: 0 2px 6px rgba(0,0,0,.06);
+  }
+  .topbar-brand { display: flex; align-items: center; gap: 12px; }
+  .logo-svg { height: 36px; flex-shrink: 0; }
+  .topbar h1 { font-size: 12px; font-weight: 800; color: var(--red); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* CONTAINER */
+  .container { max-width: 720px; margin: 0 auto; padding: 24px 16px 60px; }
+
+  /* INSTRUCOES */
+  .instrucoes {
+    background: #fafafa;
+    border-left: 4px solid var(--red);
+    border-radius: 6px;
+    padding: 14px 16px;
+    margin-bottom: 20px;
+    font-size: 13px;
+    color: var(--gray);
+  }
+  .instrucoes strong { color: var(--black); }
+  .instrucoes ol { padding-left: 16px; }
+  .instrucoes li { margin-bottom: 4px; }
+
+  /* CARDS */
+  .card { border: 1.5px solid var(--border); border-radius: 10px; margin-bottom: 14px; overflow: hidden; }
+  .card-header { display: flex; align-items: center; gap: 10px; padding: 11px 16px; background: #fafafa; border-bottom: 1px solid #f0f0f0; }
+  .card-icon { width: 26px; height: 26px; border-radius: 6px; background: var(--red-light); display: flex; align-items: center; justify-content: center; font-size: 13px; flex-shrink: 0; }
+  .card-title { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; }
+  .card-body { padding: 16px; }
+
+  /* FIELDS */
+  .row   { display: grid; gap: 12px; margin-bottom: 12px; }
+  .row-2 { grid-template-columns: 1fr 1fr; }
+  .row-3 { grid-template-columns: 1fr 1fr 1fr; }
+  @media (max-width: 500px) { .row-2, .row-3 { grid-template-columns: 1fr; } }
+
+  label { display: block; font-size: 10px; font-weight: 700; color: var(--gray); margin-bottom: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  input[type="text"], select, textarea {
+    width: 100%;
+    border: 1.5px solid var(--border);
+    border-radius: 7px;
+    padding: 9px 11px;
+    font-size: 14px;
+    font-family: var(--font);
+    color: var(--black);
+    background: #fafafa;
+    outline: none;
+    -webkit-appearance: none;
+  }
+  input:focus, select:focus, textarea:focus { border-color: var(--red); background: #fff; }
+  input::placeholder, textarea::placeholder { color: #bbb; font-style: italic; }
+  textarea { min-height: 90px; line-height: 1.55; resize: vertical; }
+  select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23999' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 10px center; background-color: #fafafa; padding-right: 30px; }
+
+  /* VITALS */
+  .vitals-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; margin-bottom: 14px; }
+  @media (max-width: 500px) { .vitals-grid { grid-template-columns: repeat(3, 1fr); } }
+  .vital-box { border: 1.5px solid var(--border); border-radius: 8px; padding: 8px 4px; text-align: center; background: #fafafa; }
+  .vital-label { font-size: 9px; font-weight: 700; color: #999; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 4px; }
+  .vital-box input { border: none; background: transparent; text-align: center; font-size: 17px; font-weight: 700; width: 100%; padding: 0; font-family: var(--font); outline: none; -webkit-appearance: none; }
+  .vital-unit { font-size: 9px; color: #bbb; margin-top: 2px; }
+
+  /* BOTOES */
+  .actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 6px; flex-wrap: wrap; }
+  .btn {
+    padding: 11px 22px;
+    border-radius: 7px;
+    font-family: var(--font);
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: none;
+    -webkit-appearance: none;
+  }
+  .btn-red { background: var(--red); color: #fff; }
+  .btn-red:active { background: var(--red-dark); }
+  .btn-outline { background: #fff; color: var(--gray); border: 1.5px solid var(--border); }
+  .btn-outline:active { border-color: var(--red); color: var(--red); }
+
+  /* RESULTADO */
+  #bloco-resultado { display: none; margin-top: 20px; }
+  #bloco-resultado .resultado-titulo {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--red);
+    margin-bottom: 8px;
+    padding: 0 2px;
+  }
+  #bloco-resultado .resultado-instrucao {
+    font-size: 12px;
+    color: var(--gray);
+    margin-bottom: 10px;
+    padding: 0 2px;
+  }
+  #texto-gerado {
+    width: 100%;
+    border: 2px solid var(--red);
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 13px;
+    font-family: monospace;
+    line-height: 1.7;
+    color: var(--black);
+    background: #fafafa;
+    resize: none;
+    min-height: 300px;
+    -webkit-user-select: text;
+    user-select: text;
+  }
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="topbar-brand">
+    <svg class="logo-svg" viewBox="0 0 230 46" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <g transform="translate(18,23)">
+        <line x1="0" y1="-13" x2="0" y2="13" stroke="#CC0000" stroke-width="4" stroke-linecap="round"/>
+        <line x1="-11.3" y1="-6.5" x2="11.3" y2="6.5" stroke="#CC0000" stroke-width="4" stroke-linecap="round"/>
+        <line x1="11.3" y1="-6.5" x2="-11.3" y2="6.5" stroke="#CC0000" stroke-width="4" stroke-linecap="round"/>
+      </g>
+      <text x="38" y="34" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="32" fill="#CC0000">PS</text>
+      <rect x="106" y="3" width="124" height="40" rx="5" fill="#CC0000"/>
+      <text x="113" y="32" font-family="Montserrat,Arial,sans-serif" font-weight="900" font-size="23" fill="#111111" letter-spacing="0.5">ZERADØ</text>
+    </svg>
+    <h1>Passagem de Caso — Comunidade PS Zerado</h1>
+  </div>
+</div>
+
+<div class="container">
+
+  <div class="instrucoes">
+    <ol>
+      <li>Preencha as informações e clique em <strong>Gerar Caso</strong></li>
+      <li>O texto aparecerá abaixo — selecione tudo e cole na Comunidade</li>
+      <li>Fotos e vídeos podem ser enviados logo em seguida como apoio</li>
+    </ol>
+  </div>
+
+  <!-- IDENTIFICAÇÃO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🪪</div>
+      <div class="card-title">Identificação</div>
+    </div>
+    <div class="card-body">
+      <div class="row row-3">
+        <div><label>Iniciais</label><input type="text" id="iniciais" placeholder="Ex: J.S."></div>
+        <div><label>Idade</label><input type="text" id="idade" placeholder="Ex: 45 anos"></div>
+        <div><label>Sexo</label>
+          <select id="sexo">
+            <option value="">Selecione</option>
+            <option>Masculino</option>
+            <option>Feminino</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- HISTÓRIA -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">💬</div>
+      <div class="card-title">História</div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div><label>Queixa Principal</label><input type="text" id="queixa" placeholder="Ex: Dor abdominal há 2 dias"></div>
+      </div>
+      <div class="row">
+        <div><label>HDA — História da Doença Atual</label>
+          <textarea id="hda" placeholder="Início, localização, característica, irradiação, intensidade, fatores de melhora/piora, sintomas associados..."></textarea>
+        </div>
+      </div>
+      <div class="row">
+        <div><label>HPP — Histórico Patológico Pregresso</label>
+          <textarea id="hpp" placeholder="Comorbidades, cirurgias, internações, medicamentos, alergias..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- EXAME -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🩺</div>
+      <div class="card-title">Exame</div>
+    </div>
+    <div class="card-body">
+      <label style="margin-bottom:8px;">Sinais Vitais</label>
+      <div class="vitals-grid">
+        <div class="vital-box"><div class="vital-label">FC</div><input type="text" id="fc" placeholder="—"><div class="vital-unit">bpm</div></div>
+        <div class="vital-box"><div class="vital-label">FR</div><input type="text" id="fr" placeholder="—"><div class="vital-unit">irpm</div></div>
+        <div class="vital-box"><div class="vital-label">PA</div><input type="text" id="pa" placeholder="—"><div class="vital-unit">mmHg</div></div>
+        <div class="vital-box"><div class="vital-label">Temp</div><input type="text" id="temp" placeholder="—"><div class="vital-unit">°C</div></div>
+        <div class="vital-box"><div class="vital-label">SpO₂</div><input type="text" id="spo2" placeholder="—"><div class="vital-unit">%</div></div>
+      </div>
+      <div class="row">
+        <div><label>Exame Físico</label>
+          <textarea id="exame_fisico" placeholder="Achados relevantes por sistemas..."></textarea>
+        </div>
+      </div>
+      <div class="row row-2">
+        <div><label>Laboratorial</label>
+          <textarea id="lab" placeholder="Ex: Leucocitose 18.000, PCR 120..."></textarea>
+        </div>
+        <div><label>Imagem</label>
+          <textarea id="imagem" placeholder="Ex: USG abdominal — coledocolitíase..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- DISCUSSÃO -->
+  <div class="card">
+    <div class="card-header">
+      <div class="card-icon">🤔</div>
+      <div class="card-title">O que você quer discutir?</div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div>
+          <textarea id="discussao" placeholder="Descreva sua dúvida ou o ponto que quer aprofundar com a comunidade..."></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- AÇÕES -->
+  <div class="actions">
+    <button class="btn btn-outline" onclick="limpar()">Limpar</button>
+    <button class="btn btn-red" onclick="gerarCaso()">Gerar Caso</button>
+  </div>
+
+  <!-- RESULTADO -->
+  <div id="bloco-resultado">
+    <div class="resultado-titulo">Caso gerado</div>
+    <div class="resultado-instrucao">Toque no texto, selecione tudo e cole na Comunidade</div>
+    <textarea id="texto-gerado" readonly></textarea>
+  </div>
+
+</div>
+
+<script>
+  const pad = n => String(n).padStart(2, '0');
+
+  const IDS = ['iniciais','idade','sexo','queixa','hda','hpp','fc','fr','pa','temp','spo2','exame_fisico','lab','imagem','discussao'];
+
+  // Autosave
+  window.addEventListener('DOMContentLoaded', function() {
+    try {
+      var raw = localStorage.getItem('pszerado');
+      if (raw) {
+        var data = JSON.parse(raw);
+        IDS.forEach(function(id) {
+          var el = document.getElementById(id);
+          if (el && data[id]) el.value = data[id];
+        });
+      }
+    } catch(e) {}
+
+    IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.addEventListener('input', salvar);
+      if (el) el.addEventListener('change', salvar);
+    });
+  });
+
+  function salvar() {
+    var data = {};
+    IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) data[id] = el.value;
+    });
+    try { localStorage.setItem('pszerado', JSON.stringify(data)); } catch(e) {}
+  }
+
+  function v(id) {
+    var el = document.getElementById(id);
+    return el ? (el.value.trim() || '—') : '—';
+  }
+
+  function gerarCaso() {
+    var t = '';
+    t += '══════════════════════════════════════════════\n';
+    t += '  PASSAGEM DE CASO — PS ZERADO\n';
+    t += '══════════════════════════════════════════════\n\n';
+
+    t += '[ IDENTIFICAÇÃO ]\n';
+    t += 'Paciente: ' + v('iniciais') + ' | Idade: ' + v('idade') + ' | Sexo: ' + v('sexo') + '\n\n';
+
+    t += '[ HISTÓRIA ]\n';
+    t += 'Queixa Principal: ' + v('queixa') + '\n\n';
+    t += 'HDA:\n' + v('hda') + '\n\n';
+    t += 'HPP:\n' + v('hpp') + '\n\n';
+
+    t += '[ EXAME ]\n';
+    t += 'Sinais Vitais: FC ' + v('fc') + ' bpm | FR ' + v('fr') + ' irpm | PA ' + v('pa') + ' mmHg | Temp. ' + v('temp') + '°C | SpO₂ ' + v('spo2') + '%\n\n';
+    t += 'Exame Físico:\n' + v('exame_fisico') + '\n\n';
+    t += 'Laboratorial:\n' + v('lab') + '\n\n';
+    t += 'Imagem:\n' + v('imagem') + '\n\n';
+
+    t += '[ O QUE QUERO DISCUTIR ]\n';
+    t += v('discussao') + '\n\n';
+
+    var now = new Date();
+    t += '──────────────────────────────────────────────\n';
+    t += 'Gerado em ' + now.toLocaleDateString('pt-BR', {day:'2-digit',month:'long',year:'numeric'}) + ' às ' + pad(now.getHours()) + 'h' + pad(now.getMinutes());
+
+    var ta = document.getElementById('texto-gerado');
+    ta.value = t;
+    ta.style.height = 'auto';
+    ta.style.height = ta.scrollHeight + 'px';
+
+    var bloco = document.getElementById('bloco-resultado');
+    bloco.style.display = 'block';
+    bloco.scrollIntoView({ behavior: 'smooth' });
+  }
+
+  function limpar() {
+    if (!confirm('Limpar todos os campos?')) return;
+    IDS.forEach(function(id) {
+      var el = document.getElementById(id);
+      if (el) el.value = '';
+    });
+    document.getElementById('bloco-resultado').style.display = 'none';
+    document.getElementById('texto-gerado').value = '';
+    try { localStorage.removeItem('pszerado'); } catch(e) {}
+  }
+</script>
+</body>
+</html>
